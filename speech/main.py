@@ -10,8 +10,11 @@ model_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)),
 
 hmm_dir = os.path.join(model_dir, 'en-us')
 dict_path = os.path.join(model_dir, 'cmudict-en-us.dict')
+model_path = os.path.join(model_dir, 'en-us.lm.dmp')
+
 config.set_string('-hmm', hmm_dir)
 config.set_string('-dict', dict_path)
+config.set_string('-lm', model_path)
 decoder = Decoder(config)
 
 p = pyaudio.PyAudio()
@@ -42,9 +45,9 @@ while True:
                 try:
                     if decoder.hyp().hypst != '':
                         print('Stream decoding result: {}'.format(decoder.hyp().hypstr))
-                except AttributError:
+                except AttributeError:
                     pass
-                decoder.start_utt('')
+                decoder.start_utt()
     else:
         break
 decoder.end_utt()
