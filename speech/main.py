@@ -1,13 +1,17 @@
 import sys
-from os import environ, path
+import os
 import pyaudio
 from pocketsphinx.pocketsphinx import *
 from sphinxbase.sphinxbase import *
 
 config = Decoder.default_config()
-config.set_string('-hmm', path.join('model', 'en-us/en-us'))
-config.set_string('-lm', path.join('model', 'en-us/en-us.lm.dmp'))
-config.set_string('-dict', path.join('model', 'en-us/cmudict-en-us.dict'))
+model_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 
+                         'model', 'en-us')
+
+hmm_dir = os.path.join(model_dir, 'en-us')
+dict_path = os.path.join(model_dir, 'cmudict-en-us.dict')
+config.set_string('-hmm', hmm_dir)
+config.set_string('-dict', dict_path)
 decoder = Decoder(config)
 
 p = pyaudio.PyAudio()
@@ -15,7 +19,7 @@ p = pyaudio.PyAudio()
 stream = p.open(format=pyaudio.paInt16, channels=1, rate=16000, input=True, frames_per_buffer=1024)
 stream.start_stream()
 in_speech_bf  = True
-decoder.start_utt('')
+decoder.start_utt()
 while True:
     buf = stream.read(1024)
     if buf:
