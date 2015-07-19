@@ -1,3 +1,5 @@
 ENV*
 *.swp
 *.pyc
+client_secret.json
+*oauth2.json
